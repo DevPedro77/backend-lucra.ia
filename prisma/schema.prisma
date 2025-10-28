@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String?
+  telefone     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  // Relações
+  messages     Message[]
+  onboardings  Onboarding[]
+  diarios      DiarioMeta[]
+  receitas     AdicionarReceita[]
+  despesas     Despesa[]
+  resumes      ResumeFinancas[]
+}
+
+model Message {
+  id           String   @id @default(uuid())
+  userId       String
+  onboardingId String?
+  diarioId     String?
+  resumeId     String?
+  despesasId   String?
+  sender       String
+  context      String?
+  message      String
+  historico    String?
+  createdAt    DateTime @default(now())
+
+  user         User            @relation(fields: [userId], references: [id])
+  onboarding   Onboarding?     @relation(fields: [onboardingId], references: [id])
+  diario       DiarioMeta?     @relation(fields: [diarioId], references: [id])
+  resume       ResumeFinancas? @relation(fields: [resumeId], references: [id])
+  despesas     Despesa?        @relation(fields: [despesasId], references: [id])
+}
+
+model Onboarding {
+  id                       String      @id @default(uuid())
+  userId                   String
+  meta_ganhos_diario       Int
+  meta_ganhos_semanal      Int
+  meta_ganhos_mensal       Int
+  gasto_diario_combustivel Int
+  gasto_diario_alimentacao Int
+  veiculo                  VeiculoEnum
+  periodo                  PeriodoEnum
+  createdAt                DateTime @default(now())
+
+  user      User        @relation(fields: [userId], references: [id])
+  diarios   DiarioMeta[]
+  messages  Message[]
+}
+
+model DiarioMeta {
+  id           String   @id @default(uuid())
+  userId       String
+  diario       String
+  meta         String
+  onboardingId String?
+  createdAt    DateTime @default(now())
+
+  user       User        @relation(fields: [userId], references: [id])
+  onboarding Onboarding? @relation(fields: [onboardingId], references: [id])
+  receitas   AdicionarReceita[]
+  resumes    ResumeFinancas[]
+  messages   Message[]
+}
+
+model AdicionarReceita {
+  id         String   @id @default(uuid())
+  userId     String
+  turnos     TurnoEnum
+  receita    Int
+  diarioId   String?
+  resumeId   String?
+  createdAt  DateTime @default(now())
+
+  user     User           @relation(fields: [userId], references: [id])
+  diario   DiarioMeta?    @relation(fields: [diarioId], references: [id])
+  resume   ResumeFinancas? @relation(fields: [resumeId], references: [id])
+}
+
+model ResumeFinancas {
+  id            String   @id @default(uuid())
+  userId        String
+  diarioId      String?
+  ganhos_semana String?
+  ganhos_mes    String?
+  gastos_semana String?
+  gastos_mes    String?
+  createdAt     DateTime @default(now())
+
+  user      User        @relation(fields: [userId], references: [id])
+  diario    DiarioMeta? @relation(fields: [diarioId], references: [id])
+  despesas  Despesa[]
+  receitas  AdicionarReceita[]
+  messages  Message[]
+}
+
+model Despesa {
+  id         String   @id @default(uuid())
+  userId     String
+  tipo       String
+  valor      Int
+  resumeId   String?
+  createdAt  DateTime @default(now())
+
+  user    User            @relation(fields: [userId], references: [id])
+  resume  ResumeFinancas? @relation(fields: [resumeId], references: [id])
+  messages Message[]
+}
+
+enum VeiculoEnum {
+  carro
+  moto
+  outro
+}
+
+enum PeriodoEnum {
+  diario
+  semanal
+  mensal
+}
+
+enum TurnoEnum {
+  manha
+  tarde
+  noite
+}
