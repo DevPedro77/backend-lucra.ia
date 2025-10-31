@@ -78,7 +78,7 @@ model AdicionarReceita {
   id         String   @id @default(uuid())
   userId     String
   turnos     TurnoEnum
-  receita    Int
+  receita    Float
   diarioId   String?
   resumeId   String?
   createdAt  DateTime @default(now())
@@ -109,7 +109,7 @@ model Despesa {
   id         String   @id @default(uuid())
   userId     String
   tipo       String
-  valor      Int
+  valor      Float
   resumeId   String?
   createdAt  DateTime @default(now())
 
