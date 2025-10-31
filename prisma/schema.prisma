@@ -6,12 +6,11 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
+// Modelos do sistema principal
 model User {
   id           String   @id @default(uuid())
   name         String?
   telefone     String   @unique
-  passwordHash String
   createdAt    DateTime @default(now())
 
   // Relações
@@ -135,4 +134,36 @@ enum TurnoEnum {
   manha
   tarde
   noite
+}
+
+
+// Landing Page
+model Purchase {
+  id            String   @id @default(uuid())
+  telefone      String @unique
+  name          String 
+  status        PurchaseStatus @default(PENDING)
+  amount        Int
+  transactionId String?
+  createdAt     DateTime @default(now())
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  purchaseId    String
+  telefone      String
+  status        PaymentStatus @default(SUCCEEDED)
+  createdAt     DateTime @default(now())
+}
+
+enum PurchaseStatus {
+  PENDING
+  PAID
+  EXPIRED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
 }
