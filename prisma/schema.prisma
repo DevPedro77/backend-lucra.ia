@@ -108,7 +108,7 @@ model ResumeFinancas {
 model Despesa {
   id         String   @id @default(uuid())
   userId     String
-  tipo       String
+  tipo       DespesaTiposEnum
   valor      Float
   resumeId   String?
   createdAt  DateTime @default(now())
@@ -134,6 +134,12 @@ enum TurnoEnum {
   manha
   tarde
   noite
+}
+enum DespesaTiposEnum {
+  COMBUSTIVEL
+  ALIMENTACAO
+  OUTRO
+  MANUTENCAO
 }
 
 
