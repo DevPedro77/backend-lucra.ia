@@ -1,13 +1,22 @@
 import Fastify from "fastify";
 import "dotenv/config";
 import cors from "@fastify/cors"
-
 import routes from "../routes/index.js";
 
 const app = Fastify({ logger: true });
 app.register(cors, {
   origin: true,
 });
+
+// Errors
+app.setErrorHandler((error, request, reply) => {
+  reply.status(error.statusCode || 500).send({
+    error: error.name || "InternalServerError",
+    message: error.message,
+  });
+});
+
+// Rotas
 
 app.register(routes);
 const start = async () => {
