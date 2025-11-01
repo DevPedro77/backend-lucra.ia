@@ -21,7 +21,10 @@ class AuthController {
     }
 
     const token = jwt.sign(
-      { telefone: user.telefone },
+      { 
+        userId: user.id,           // ✅ Adicione userId
+        telefone: user.telefone 
+      },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN }
     );

@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "AdicionarReceita" ALTER COLUMN "receita" SET DATA TYPE DOUBLE PRECISION;
+
+-- AlterTable
+ALTER TABLE "Despesa" ALTER COLUMN "valor" SET DATA TYPE DOUBLE PRECISION;

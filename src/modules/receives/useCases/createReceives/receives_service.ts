@@ -1,7 +1,6 @@
 import prisma from "../../../../shared/prisma.js";
 
 interface ICreateReceive {
-  userId: string;
   turnos: "manha" | "tarde" | "noite";
   receita: number;
   diarioId?: string;
@@ -9,16 +8,32 @@ interface ICreateReceive {
 }
 
 class ReceivesService {
-  async create({ userId, turnos, receita, diarioId, resumeId }: ICreateReceive) {
+  async create(userId: string, data: ICreateReceive) {
+    console.log("========== DEBUG SERVICE ==========");
+    console.log("🔍 userId recebido:", userId);
+    console.log("🔍 tipo:", typeof userId);
+    console.log("🔍 data:", data);
+    
+    const { turnos, receita, diarioId, resumeId } = data;
+
+    console.log("🔍 Dados para Prisma:", {
+      userId,
+      turnos,
+      receita,
+      diarioId,
+      resumeId,
+    });
+
     const novaReceita = await prisma.adicionarReceita.create({
       data: {
         userId,
-        turnos: turnos,
+        turnos,
         receita,
         diarioId,
         resumeId,
       },
     });
+
     return novaReceita;
   }
 
@@ -36,4 +51,4 @@ class ReceivesService {
   }
 }
 
-export default  ReceivesService;
+export default ReceivesService;
