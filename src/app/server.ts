@@ -18,7 +18,7 @@ app.setErrorHandler((error, request, reply) => {
 
 // Rotas
 
-app.register(routes);
+app.register(routes, { prefix: '/api' });
 const start = async () => {
   try {
     await app.listen({ port: 8800, host: "0.0.0.0" });
