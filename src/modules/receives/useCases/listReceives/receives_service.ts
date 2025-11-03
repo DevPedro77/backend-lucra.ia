@@ -9,6 +9,10 @@ async listarPorData(userId: string) {
   const receitas = await prisma.adicionarReceita.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
+    include: {
+      user: true,
+      
+    },
   });
   
   console.log('📦 Retornou', receitas.length, 'receitas'); // ← LOG 5
