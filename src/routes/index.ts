@@ -4,6 +4,7 @@ import { authMiddleware } from "../middleware/authAuthenticated.js";
 import ReceivesController from "../modules/receives/useCases/createReceives/receives_controller.js";
 import PurchaseController from "../modules/purchase/purchase_controller.js";
 import DespesasController from "../modules/depesas/useCases/createDespesas/despesas_controller.js";
+import ListReceitasController from "../modules/receives/useCases/listReceives/receives_controller.js";
 
 const routes = (app: FastifyInstance) => {
   app.register(authRoutes);
@@ -20,6 +21,13 @@ const routes = (app: FastifyInstance) => {
   app.post("/receitas", {
     preHandler: [authMiddleware]  
   }, receivesController.handle.bind(receivesController));
+
+  // Listando receitas
+app.get("/receitas", {
+  preHandler: [authMiddleware]
+}, ListReceitasController.listarPorData.bind(ListReceitasController));
+
+
 
   // Rota de despesas
   const despesasController = new DespesasController();
