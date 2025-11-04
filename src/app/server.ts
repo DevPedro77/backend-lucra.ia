@@ -20,7 +20,6 @@ app.setErrorHandler((error, request, reply) => {
 });
 
 // Rotas
-
 app.register(routes, { prefix: '/api' });
 const start = async () => {
   try {
