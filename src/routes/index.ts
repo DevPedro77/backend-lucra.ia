@@ -6,6 +6,11 @@ import PurchaseController from "../modules/purchase/purchase_controller.js";
 import DespesasController from "../modules/depesas/useCases/createDespesas/despesas_controller.js";
 import ListReceitasController from "../modules/receives/useCases/listReceives/receives_controller.js";
 import DeleteReceivesController from "../modules/receives/useCases/deleteReceives/receives_controller.js";
+import ListaDespesasController from "../modules/depesas/useCases/listDespesas/despesas_controller.js";
+
+
+
+
 
 const routes = (app: FastifyInstance) => {
   app.register(authRoutes);
@@ -55,6 +60,10 @@ const routes = (app: FastifyInstance) => {
     },
     despesasController.handle.bind(despesasController)
   );
+  //Listar despesas
+app.get("/despesas", {
+  preHandler: [authMiddleware],
+}, ListaDespesasController.list.bind(ListaDespesasController))
 };
 
 export default routes;
