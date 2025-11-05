@@ -7,7 +7,7 @@ import DespesasController from "../modules/depesas/useCases/createDespesas/despe
 import ListReceitasController from "../modules/receives/useCases/listReceives/receives_controller.js";
 import DeleteReceivesController from "../modules/receives/useCases/deleteReceives/receives_controller.js";
 import ListaDespesasController from "../modules/depesas/useCases/listDespesas/despesas_controller.js";
-
+import DeleteDespesasController from "../modules/depesas/useCases/deleteDespesas/despesas_controller.js";
 
 
 
@@ -64,6 +64,12 @@ const routes = (app: FastifyInstance) => {
 app.get("/despesas", {
   preHandler: [authMiddleware],
 }, ListaDespesasController.list.bind(ListaDespesasController))
+
+//Deletando despesas por ID
+const deleteDespesasController = new DeleteDespesasController();
+app.delete("/despesas/:id", {
+  preHandler: [authMiddleware]
+}, deleteDespesasController.delete.bind(deleteDespesasController));
 };
 
 export default routes;
