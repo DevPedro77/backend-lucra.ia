@@ -12,8 +12,8 @@ model User {
   name         String?
   telefone     String   @unique
   createdAt    DateTime @default(now())
+  onboardDone  Boolean  @default(false)
 
-  // Relações
   messages     Message[]
   onboardings  Onboarding[]
   diarios      DiarioMeta[]
@@ -21,6 +21,7 @@ model User {
   despesas     Despesa[]
   resumes      ResumeFinancas[]
 }
+
 
 model Message {
   id           String   @id @default(uuid())
@@ -51,7 +52,7 @@ model Onboarding {
   gasto_diario_combustivel Int
   gasto_diario_alimentacao Int
   veiculo                  VeiculoEnum
-  periodo                  PeriodoEnum
+  periodo                  TurnoEnum
   createdAt                DateTime @default(now())
 
   user      User        @relation(fields: [userId], references: [id])
@@ -122,12 +123,6 @@ enum VeiculoEnum {
   carro
   moto
   outro
-}
-
-enum PeriodoEnum {
-  diario
-  semanal
-  mensal
 }
 
 enum TurnoEnum {
