@@ -8,7 +8,7 @@ import ListReceitasController from "../modules/receives/useCases/listReceives/re
 import DeleteReceivesController from "../modules/receives/useCases/deleteReceives/receives_controller.js";
 import ListaDespesasController from "../modules/depesas/useCases/listDespesas/despesas_controller.js";
 import DeleteDespesasController from "../modules/depesas/useCases/deleteDespesas/despesas_controller.js";
-
+import OnboardingController from "../modules/onboarding/onboarding_controller.js";
 
 
 
@@ -70,6 +70,14 @@ const deleteDespesasController = new DeleteDespesasController();
 app.delete("/despesas/:id", {
   preHandler: [authMiddleware]
 }, deleteDespesasController.delete.bind(deleteDespesasController));
+
+// Onboarding
+const onboardingController = new OnboardingController()
+app.post("/onboarding", {
+  preHandler: [authMiddleware]
+}, onboardingController.execute.bind(onboardingController))
+
 };
+
 
 export default routes;
