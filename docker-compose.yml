@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: lucra-postgres
+    environment:
+      POSTGRES_USER: lucra_user
+      POSTGRES_PASSWORD: lucra_password
+      POSTGRES_DB: lucra_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lucra_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lucra-backend
+    ports:
+      - "8800:8800"
+    environment:
+      DATABASE_URL: postgresql://lucra_user:lucra_password@postgres:5432/lucra_db
+      PORT: 8800
+      NODE_ENV: development
+      CORS_ORIGIN: "*"
+      RATE_LIMIT_MAX: 100
+      RATE_LIMIT_TIME_WINDOW: 60000
+      JWT_SECRET: development_jwt_secret_change_in_production
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8800/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  postgres_data:
+
