@@ -28,6 +28,7 @@ export const swaggerConfig: FastifyPluginAsync = async (fastify) => {
         { name: "Compra", description: "Rotas de compras" },
         { name: "Despesas", description: "Rotas de despesas" },
         { name: "Cadastrar usuario", description: "Rotas de cadastro de usuario" },
+        { name: "Health", description: "Verificação de saúde da API" },
       ],
     },
   });

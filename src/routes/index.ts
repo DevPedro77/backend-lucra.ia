@@ -9,8 +9,8 @@ import DeleteReceivesController from "../modules/receives/useCases/deleteReceive
 import ListaDespesasController from "../modules/depesas/useCases/listDespesas/despesas_controller.js";
 import DeleteDespesasController from "../modules/depesas/useCases/deleteDespesas/despesas_controller.js";
 import OnboardingController from "../modules/onboarding/onboarding_controller.js";
-
-
+import DashboardController from "../modules/dashboard/useCases/Overview/resume_controller.js";
+import ReturningDataController from "../modules/dashboard/useCases/OnboardingData/onboarding_controller.js";
 
 const routes = (app: FastifyInstance) => {
   app.register(authRoutes);
@@ -42,7 +42,7 @@ const routes = (app: FastifyInstance) => {
     ListReceitasController.listarPorData.bind(ListReceitasController)
   );
 
-  // Deletando receita por id - CERTIFIQUE-SE QUE ESTÁ AQUI!
+  // Deletando receita por id 
   app.delete(
     "/receitas/:id",
     {
@@ -76,7 +76,16 @@ const onboardingController = new OnboardingController()
 app.post("/onboarding", {
   preHandler: [authMiddleware]
 }, onboardingController.execute.bind(onboardingController))
-
+// Dashboard --> Receitas e despesas
+const dashboardController = new DashboardController();
+app.get("/dashboard", {
+  preHandler: [authMiddleware]
+},dashboardController.handle.bind(dashboardController))
+// Dashboard -> Metas e gastos 
+const returningData = new ReturningDataController()
+app.get("/dashboard/onboarding", {
+  preHandler: [authMiddleware]
+},returningData.handle.bind(returningData))
 };
 
 
